@@ -1,4 +1,4 @@
 provider: github
-owner: tres-joli
+owner: dhrvjgd
 repo: grabbr
 token: ${env.GITHUB_TOKEN}

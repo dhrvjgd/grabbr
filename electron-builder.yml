@@ -6,12 +6,13 @@ directories:
   buildResources: build
 
 files:
-  - '!**/.vscode/*'
-  - '!src/*'
-  - '!electron.vite.config.{js,ts,mjs,cjs}'
-  - '!{global.d.ts,oxfmt.config.ts,oxlint.config.ts,dev-app-update.yml,CHANGELOG.md,README.md}'
-  - '!{.env,.env.*,bun.lock}'
-  - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+  - "!**/.vscode/*"
+  - "!src/*"
+  - "!electron.vite.config.{js,ts,mjs,cjs}"
+  - "!{global.d.ts,oxfmt.config.ts,oxlint.config.ts,dev-app-update.yml,CHANGELO\
+    G.md,README.md}"
+  - "!{.env,.env.*,bun.lock}"
+  - "!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}"
 
 asarUnpack:
   - resources/**
@@ -48,7 +49,7 @@ linux:
     - AppImage
     # - snap
     - deb
-  maintainer: tres-joli
+  maintainer: dhrvjgd
   category: Utility
 
 appImage:
