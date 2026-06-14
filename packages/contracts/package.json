@@ -1,0 +1,12 @@
+{
+  "name": "@grabbr/contracts",
+  "type": "module",
+  "exports": {
+    "./enums": "./src/enums/index.ts",
+    "./types": "./src/types/index.ts",
+    "./utils": "./src/utils.ts"
+  },
+  "devDependencies": {
+    "@grabbr/config": "workspace:*"
+  }
+}

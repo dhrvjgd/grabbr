@@ -1,171 +1,160 @@
-# Grabbr
+# grabbr
 
-Grabbr is a desktop multimedia downloader built with Electron, React, and TypeScript. It is focused on a fast local workflow for downloading audio or video from supported URLs with `yt-dlp`, bundled media tools, saved preferences, and platform-specific desktop builds.
+> Desktop multimedia downloader for YouTube and Instagram — powered by
+> yt-dlp and FFmpeg.
+
+Grabbr is a cross-platform desktop application that downloads audio and
+video from supported URLs. It wraps `yt-dlp` and `FFmpeg` in a clean
+Svelte UI, with saved preferences, GPU-accelerated encoding, and
+auto-updates.
+
+![Grabbr](.github/screenshot.png)
 
 ## Features
 
-- Desktop-first downloader for YouTube and Instagram links
 - Audio and video download modes with persistent preferences
-- Audio presets plus custom output controls for FLAC, ALAC, WAV, OPUS, M4A, MP3, and VORBIS
-- Video presets plus custom quality selection from 144p up to 4320p and MP4 or MKV output
-- Video sorting preferences for prioritizing H.264 or H.265 sources before other selection rules
-- Optional post-download video re-encoding with configurable encoder and codec choices
-- Optional metadata and chapter embedding
-- Download location modes for asking every time or using a saved folder
-- Theme switching plus resettable saved options
-- Native folder and file pickers, cancelable downloads, and "Show in Folder" actions
-- In-app `yt-dlp` version checking and updating
-- Packaged app auto-update support through `electron-updater`
-- Experimental `cookies.txt` support for rate-limited downloads, with cleanup after use
+- Audio presets for FLAC, ALAC, WAV, OPUS, M4A, MP3, and VORBIS
+- Video presets with resolution from 144p to 4320p, MP4 or MKV output
+- Codec sorting to prefer H.264 or H.265 sources
+- Optional post-download re-encoding with configurable encoder and codec
+- GPU vendor detection (NVIDIA, AMD, Intel) for hardware encoding
+- Metadata and chapter embedding
+- Ask-every-time or saved download folder
+- System, light, and dark themes
+- In-app yt-dlp version checking and updating
+- App auto-updates via Electrobun
+- Experimental cookies.txt support for rate-limited downloads
 
 ## Tech Stack
 
-- Electron 41
-- React 19
-- TypeScript 6
-- electron-vite
-- Tailwind CSS 4
-- Bun
-- electron-builder
-- electron-store
+| Layer         | Technology                                                                                |
+| ------------- | ----------------------------------------------------------------------------------------- |
+| Desktop shell | [Electrobun](https://github.com/Electrobun/electrobun)                                    |
+| Renderer      | [Svelte 5](https://svelte.dev/) (runes mode)                                              |
+| UI toolkit    | [shadcn-svelte](https://shadcn-svelte.com/) + [Tailwind CSS v4](https://tailwindcss.com/) |
+| Runtime       | [Bun](https://bun.sh/)                                                                    |
+| Monorepo      | [Turborepo](https://turbo.build/)                                                         |
+| Persistence   | SQLite via `bun:sqlite`                                                                   |
+| Media engine  | [yt-dlp](https://github.com/yt-dlp/yt-dlp) + [FFmpeg](https://ffmpeg.org/)                |
+| Linting       | Oxlint + Oxfmt                                                                            |
+| Git hooks     | Lefthook                                                                                  |
 
 ## Project Structure
 
 ```text
 grabbr/
-├── build/                 # App icons and macOS entitlements
-├── scripts/               # Local setup utilities
-├── src/
-│   ├── main/              # Electron main process, IPC, updater, yt-dlp services
-│   ├── preload/           # Safe renderer bridge
-│   └── renderer/          # React UI
-├── electron-builder.yml   # Packaging config
-├── electron.vite.config.ts
+├── apps/
+│   ├── desktop/         # Electrobun main process (Bun entry, RPC handlers, yt-dlp/FFmpeg)
+│   └── ui/              # Svelte 5 SPA (renderer)
+├── packages/
+│   ├── config/           # Shared tsconfig
+│   ├── contracts/        # Shared enums, types, URL validation
+│   └── rpc/              # RPC type definitions for UI ↔ Desktop IPC
+├── scripts/
+├── turbo.json
 └── package.json
 ```
 
-`resources/bin/` is created locally by the binary download script and contains the platform-specific `yt-dlp`, `ffmpeg`, and `ffprobe` executables used by the app.
-
 ## Prerequisites
 
-- [Bun](https://bun.sh/)
+- [Bun](https://bun.sh/) 1.3+
 - Windows, macOS, or Linux
 
 ## Getting Started
 
-### Install dependencies
-
 ```bash
+# Install dependencies
 bun install
-```
 
-### Download required binaries
+# Download yt-dlp, ffmpeg, and ffprobe binaries
+bun run scripts:bin
 
-```bash
-bun run down
-```
-
-This downloads platform-specific copies of `yt-dlp`, `ffmpeg`, and `ffprobe` into `resources/bin`.
-
-### Start development
-
-```bash
+# Start development (UI + desktop)
 bun run dev
 ```
 
-### Preview the built app
-
-```bash
-bun run start
-```
-
-## Build
-
-### Typecheck and bundle
-
-```bash
-bun run build
-```
-
-`bun run build` runs the repo typechecks before bundling the Electron app.
-
-### Package for a platform
-
-```bash
-bun run build:win
-bun run build:mac
-bun run build:linux
-```
-
-These commands create platform-specific packages using the current project build output.
-
-### Create an unpacked build
-
-```bash
-bun run build:unpack
-```
-
-Packaged output is written to `dist/`.
+Then open the desktop app directly (it will connect to Vite's HMR on port 5174).
 
 ## Available Scripts
 
-- `bun run dev` starts Electron and the renderer in development mode
-- `bun run start` previews the current built app
-- `bun run build` runs both TypeScript checks and builds the app
-- `bun run build:win` creates a Windows package
-- `bun run build:mac` creates a macOS package
-- `bun run build:linux` creates Linux packages
-- `bun run build:unpack` creates an unpacked desktop build
-- `bun run typecheck` runs both Node and renderer TypeScript checks
-- `bun run lint` runs `oxlint`
-- `bun run format` formats the repo with `oxfmt`
-- `bun run down` downloads required media binaries
-- `bun run clean` removes dependencies and build artifacts
+| Script                         | Description                                       |
+| ------------------------------ | ------------------------------------------------- |
+| `bun run dev`                  | Start all apps in development mode                |
+| `bun run build`                | Build all apps                                    |
+| `bun run dev:ui`               | Start only the UI dev server                      |
+| `bun run dev:desktop`          | Start only the desktop app in watch mode          |
+| `bun run build:ui`             | Build only the UI                                 |
+| `bun run build:desktop`        | Build the desktop app (stable variant)            |
+| `bun run build:desktop:canary` | Build the desktop app (canary variant)            |
+| `bun run check-types`          | TypeScript type-checking across the monorepo      |
+| `bun run check`                | Lint and format with Oxlint + Oxfmt               |
+| `bun run clean`                | Remove node_modules, build artifacts              |
+| `bun run scripts:bin`          | Download media binaries (yt-dlp, ffmpeg, ffprobe) |
 
 ## Download Options
 
-### Audio
+- **Audio** — Best or Custom presets with format, quality, metadata, and
+  chapter controls
+- **Video** — Best or Custom presets with resolution, container, and
+  metadata controls
+- **Sorting** — Prefer H.264 or H.265 formats before quality-based
+  selection
+- **Encoding** — Optional post-download re-encoding with configurable
+  encoder, codec, speed, and CRF
+- **General** — Theme switching, download folder mode, reset saved
+  options
+- **Updates** — View and update yt-dlp version from the app
+- **Experimental** — Select a cookies.txt file for rate-limited sessions
+  (deleted after use)
 
-- `Best` preset for fast highest-quality audio downloads
-- `Custom` preset with selectable format and quality controls
-- Optional metadata and chapter embedding
+## Architecture
 
-### Video
+```text
+┌───────────────────────────────────────────────────────────┐
+│                     Desktop Process                       │
+│  ┌─────────────┐     ┌──────────────┐                     │
+│  │  Browser-   │────▶│  Main Entry  │                     │
+│  │   Window    │     │  (index.ts)  │                     │
+│  │  (WebView)  │     │              │                     │
+│  │             │◀────│     RPC      │                     │
+│  │  Svelte 5   │     │   Handlers   │                     │
+│  │    SPA      │     │              │                     │
+│  └─────────────┘     │ ┌──────────┐ │                     │
+│        │             │ │ Services │ │                     │
+│        │ RPC         │ │ - yt-dlp │ │──▶ yt-dlp/FFmpeg    │
+│        │ messages    │ │ - SQLite │ │──▶ preferences.db   │
+│        │             │ │ - Update │ │──▶ auto-updater     │
+│        ▼             │ └──────────┘ │                     │
+│   ┌──────────┐       └──────────────┘                     │
+│   │ Toasts / │                                            │
+│   │ Status   │                                            │
+│   └──────────┘                                            │
+└───────────────────────────────────────────────────────────┘
+```
 
-- `Best` preset for fast highest-quality MP4 downloads
-- `Custom` preset with selectable resolution and container
-- Optional sorting rules to prefer H.264 or H.265 compatible sources
-- Optional metadata and chapter embedding
+The Svelte 5 renderer communicates with the Bun main process exclusively
+through **Electrobun's typed RPC** (request/response + unidirectional
+messages). Preferences are stored in SQLite via `bun:sqlite` with an
+in-memory read cache. Downloads are managed as child processes of
+`yt-dlp`, with progress forwarded to the UI as RPC messages.
 
-### Sorting
+## Build & Package
 
-- Prefer H.264 or H.265 formats before the usual quality selection logic
-- Useful when you want better compatibility without enabling re-encoding
+```bash
+# Production build (UI → desktop bundle)
+bun run build:desktop
 
-### Encoding
+# Canary build
+bun run build:desktop:canary
 
-- Optional re-encoding for downloaded video
-- Configurable encoder and output codec selections
-- Best described as an advanced workflow because it can be slow and resource-intensive
+# Platform-specific packages (via electrobun)
+# Configured in apps/desktop/electrobun.config.ts
+```
 
-### General
-
-- System, light, and dark themes
-- Ask every time or reuse a selected download folder
-- Reset saved options back to defaults
-
-### Updates
-
-- Show installed `yt-dlp` version
-- Update `yt-dlp` directly from the app
-- Receive packaged app updates when running production builds
-
-### Experimental
-
-- Select a `cookies.txt` file for cases where rate limits block downloads
-- Treat this feature carefully because the file may contain sensitive account data
-- Grabbr deletes the selected `cookies.txt` file after a download flow, so do not point it at your only copy
+Built packages are output to `apps/desktop/build/`.
 
 ## Releases
 
-GitHub Actions builds draft releases for Windows, macOS, and Linux when version tags matching `v*.*.*` are pushed.
+GitHub Actions builds draft releases when version tags matching
+`v*.*.*` are pushed. Release artifacts are published for Windows, macOS,
+and Linux.

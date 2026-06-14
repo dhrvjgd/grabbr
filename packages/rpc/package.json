@@ -1,0 +1,12 @@
+{
+  "name": "@grabbr/rpc",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "devDependencies": {
+    "@grabbr/config": "workspace:*",
+    "@grabbr/contracts": "workspace:*",
+    "electrobun": "catalog:"
+  }
+}
