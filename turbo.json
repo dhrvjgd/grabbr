@@ -1,0 +1,45 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**", ".svelte-kit/**", "build/**"]
+    },
+    "build:ui": {
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**", ".svelte-kit/**"]
+    },
+    "build:web": {
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["build/**", ".svelte-kit/**"]
+    },
+    "desktop#build": {
+      "dependsOn": ["ui#build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**", ".svelte-kit/**", "build/**"]
+    },
+    "desktop#build:stable": {
+      "dependsOn": ["ui#build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**", ".svelte-kit/**", "build/**"]
+    },
+    "desktop#build:canary": {
+      "dependsOn": ["ui#build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**", ".svelte-kit/**", "build/**"]
+    },
+    "check:types": {
+      "cache": false
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "scripts:bin": {
+      "cache": false,
+      "outputs": ["bin/**"]
+    }
+  }
+}

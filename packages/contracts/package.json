@@ -1,0 +1,16 @@
+{
+  "name": "@grabbr/contracts",
+  "type": "module",
+  "exports": {
+    "./rpc": {
+      "types": "./src/rpc.ts",
+      "import": "./src/rpc.ts"
+    }
+  },
+  "devDependencies": {
+    "@grabbr/config": "workspace:*",
+    "@grabbr/shared": "workspace:*",
+    "@typescript/native-preview": "catalog:",
+    "electrobun": "catalog:"
+  }
+}

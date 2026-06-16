@@ -1,5 +1,8 @@
-import { defineConfig } from 'oxlint'
+import { defineConfig } from "oxlint";
 
 export default defineConfig({
-  ignorePatterns: ['**/node_modules', '**/dist', '**/out']
-})
+  categories: { correctness: "error" },
+  env: { builtin: true },
+  plugins: ["typescript", "unicorn", "oxc", "import"],
+  rules: {},
+});

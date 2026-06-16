@@ -1,0 +1,7 @@
+{
+  "name": "@grabbr/config",
+  "private": true,
+  "devDependencies": {
+    "@typescript/native-preview": "catalog:"
+  }
+}

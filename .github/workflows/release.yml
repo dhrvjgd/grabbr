@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, ubuntu-24.04-arm, macos-26, macos-26-intel, windows-latest]
 
     steps:
       - name: Check out Git repository
@@ -22,61 +22,18 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Download Binaries
-        run: bun run down
-
-      - name: Verify binaries (Unix)
-        if: matrix.os != 'windows-latest'
-        run: |
-          resources/bin/ffmpeg -version
-          resources/bin/ffprobe -version
-          resources/bin/yt-dlp --version
-
-      - name: Verify binaries (Windows)
-        if: matrix.os == 'windows-latest'
-        shell: pwsh
-        run: |
-          resources\bin\ffmpeg.exe -version
-          resources\bin\ffprobe.exe -version
-          resources\bin\yt-dlp.exe --version
-
       - name: Install Dependencies
         run: bun install
 
-      - name: build-linux
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          # sudo snap install snapcraft --classic
-          bun run build:linux
+      - name: Build
+        run: bun run build:desktop:stable
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TURBO_TELEMETRY_DISABLED: 1
 
-      - name: build-mac
-        if: matrix.os == 'macos-latest'
-        run: bun run build:mac
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: build-win
-        if: matrix.os == 'windows-latest'
-        run: bun run build:win
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: release
+      - name: Release
         uses: softprops/action-gh-release@v3
         with:
           draft: true
-          files: |
-            dist/*.exe
-            dist/*.zip
-            dist/*.dmg
-            dist/*.AppImage
-            dist/*.snap
-            dist/*.deb
-            dist/*.rpm
-            dist/*.tar.gz
-            dist/*.yml
-            dist/*.blockmap
+          files: apps/desktop/artifacts/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

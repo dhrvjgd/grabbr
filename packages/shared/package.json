@@ -1,0 +1,26 @@
+{
+  "name": "@grabbr/shared",
+  "type": "module",
+  "exports": {
+    "./ffmpeg": {
+      "types": "./src/ffmpeg.ts",
+      "import": "./src/ffmpeg.ts"
+    },
+    "./preferences": {
+      "types": "./src/preferences.ts",
+      "import": "./src/preferences.ts"
+    },
+    "./utils": {
+      "types": "./src/utils.ts",
+      "import": "./src/utils.ts"
+    },
+    "./ytdlp": {
+      "types": "./src/ytdlp.ts",
+      "import": "./src/ytdlp.ts"
+    }
+  },
+  "devDependencies": {
+    "@grabbr/config": "workspace:*",
+    "@typescript/native-preview": "catalog:"
+  }
+}

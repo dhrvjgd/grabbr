@@ -1,0 +1,25 @@
+{
+  "name": "desktop",
+  "version": "v0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check:types": "tsgo --noEmit",
+    "start": "turbo -F ui build && electrobun dev",
+    "dev": "electrobun dev --watch",
+    "build": "electrobun build",
+    "build:stable": "electrobun build --env=stable",
+    "build:canary": "electrobun build --env=canary",
+    "scripts:bin": "bun run scripts/prebuild/index.ts"
+  },
+  "dependencies": {
+    "@grabbr/contracts": "workspace:*",
+    "@grabbr/shared": "workspace:*",
+    "electrobun": "catalog:"
+  },
+  "devDependencies": {
+    "@grabbr/config": "workspace:*",
+    "@typescript/native-preview": "catalog:",
+    "resedit-cli": "^3.1.0"
+  }
+}
