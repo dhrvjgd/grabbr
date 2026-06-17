@@ -4,20 +4,7 @@ import { join } from "path";
 
 import { $ } from "bun";
 
-type OS = "win32" | "darwin" | "linux";
-type ARCH = "x64" | "arm64";
-
-const getSystemInfo = () => {
-  const os = process.platform;
-  if (!["win32", "darwin", "linux"].includes(os)) {
-    throw new Error(`Unsupported OS: ${os}`);
-  }
-
-  const arch = process.arch;
-  return { os: os as OS, arch: arch as ARCH };
-};
-
-const BIN_DIR = "bin";
+import { BIN_DIR, getSystemInfo, type ARCH, type OS } from "../utils";
 
 const download = async (url: string, dest: string) => {
   console.log(`Downloading ${url}`);
@@ -159,7 +146,7 @@ const downloadFFmpeg = async (os: OS, a: ARCH): Promise<void> => {
   }
 };
 
-const downloadBinaries = async () => {
+export const downloadBinaries = async () => {
   const { os, arch } = getSystemInfo();
 
   await rm(BIN_DIR, { recursive: true, force: true });
@@ -169,8 +156,3 @@ const downloadBinaries = async () => {
 
   console.log("All binaries downloaded into", BIN_DIR);
 };
-
-downloadBinaries().catch((error) => {
-  console.error("Error: ", error);
-  process.exit(1);
-});

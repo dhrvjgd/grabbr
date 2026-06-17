@@ -13,7 +13,7 @@
     },
     "build:web": {
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["build/**", ".svelte-kit/**"]
+      "outputs": [".vercel/**", ".svelte-kit/**"]
     },
     "desktop#build": {
       "dependsOn": ["ui#build"],

@@ -26,15 +26,18 @@ export const mainWindow = new BrowserWindow({
 });
 
 if (channel !== "dev") {
-  const { updateAvailable } = await Updater.checkForUpdate();
-  if (updateAvailable) {
-    Updater.downloadUpdate();
-  }
-
   mainWindow.webview.on("dom-ready", async () => {
     Updater.onStatusChange((entry) => {
       mainWindow.webview.rpc?.send("updateStatus", entry.status);
     });
+
+    const { updateAvailable, error } = await Updater.checkForUpdate();
+    if (error) {
+      console.error("Update Error: ", error);
+    }
+    if (updateAvailable) {
+      Updater.downloadUpdate();
+    }
   });
 }
 

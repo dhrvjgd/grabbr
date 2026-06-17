@@ -1,6 +1,6 @@
 {
   "name": "desktop",
-  "version": "v0.2.0",
+  "version": "v0.2.2",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,7 +10,7 @@
     "build": "electrobun build",
     "build:stable": "electrobun build --env=stable",
     "build:canary": "electrobun build --env=canary",
-    "scripts:bin": "bun run scripts/prebuild/index.ts"
+    "scripts:bin": "bun run scripts/pre-build/index.ts"
   },
   "dependencies": {
     "@grabbr/contracts": "workspace:*",

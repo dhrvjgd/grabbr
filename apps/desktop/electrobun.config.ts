@@ -1,7 +1,6 @@
 import type { ElectrobunConfig } from "electrobun/bun";
 
 const webBuildDir = "../ui/dist";
-const isGithubActions = Bun.env.GITHUB_ACTIONS === "true";
 const isWindows = process.platform === "win32";
 const ext = isWindows ? ".exe" : "";
 
@@ -10,7 +9,7 @@ export default {
     name: "Grabbr",
     description: "Multimedia Downloader",
     identifier: "grabbr",
-    version: "0.2.1",
+    version: "0.2.2",
   },
   runtime: {
     exitOnLastWindowClosed: true,
@@ -68,9 +67,9 @@ export default {
     generatePatch: true,
   },
   scripts: {
-    preBuild: isGithubActions ? "scripts/pre-build.ts" : undefined,
-    postBuild: isWindows && isGithubActions ? "scripts/post-build.ts" : undefined,
+    preBuild: "scripts/pre-build/index.ts",
+    postBuild: "scripts/post-build/index.ts",
     // postWrap: ,
-    postPackage: isWindows && isGithubActions ? "scripts/post-package.ts" : undefined,
+    postPackage: "scripts/post-package/index.ts",
   },
 } satisfies ElectrobunConfig;
