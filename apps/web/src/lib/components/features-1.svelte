@@ -43,6 +43,6 @@
     </p>
   </div>
   <div class="ml-auto w-[150%] pl-2 md:w-full md:pl-0 xl:col-span-2">
-    <Image src="screenshots/audio-tab.png" class="screenshot" />
+    <Image src="/screenshots/audio-tab.png" class="screenshot" />
   </div>
 </section>

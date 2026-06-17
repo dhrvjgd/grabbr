@@ -41,7 +41,7 @@ if (channel !== "dev") {
 Electrobun.events.on("before-quit", () => {
   for (const [, proc] of activeDownloadProcesses) {
     try {
-      proc.kill("SIGTERM");
+      proc.kill("SIGKILL");
     } catch (error) {
       console.error(error);
     }

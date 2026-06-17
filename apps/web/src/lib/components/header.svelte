@@ -16,7 +16,7 @@
   ></div>
 
   <a href="/" class="inline-flex items-center gap-2.5">
-    <Image src="favicon.png" width={32} height={32} />
+    <Image src="/favicon.png" width={32} height={32} />
     <h1 class="text-2xl font-medium tracking-tight">Grabbr</h1>
   </a>
   <div class="md:hidden">

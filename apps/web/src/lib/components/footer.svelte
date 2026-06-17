@@ -12,8 +12,8 @@
     <HugeiconsIcon icon={Download01Icon} strokeWidth={2} class="size-12" />
     <span class="heading">Ready to try Grabbr?</span>
     <p class="content max-w-2xl text-center text-balance">
-      Grabbr is free, open source, and always will be. Download once, use forever. No subscriptions,
-      no accounts, no nonsense.
+      Grabbr is free and open source. Download once, use forever. No subscriptions, no accounts, no
+      nonsense.
     </p>
     <div class="flex flex-col items-center -space-y-5">
       <Download />

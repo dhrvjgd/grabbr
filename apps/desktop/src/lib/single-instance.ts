@@ -1,10 +1,9 @@
-import { mkdirSync, readFileSync, rmSync, writeFileSync } from "fs";
+import { existsSync, readFileSync, rmSync, writeFileSync } from "fs";
 import { join } from "path";
 
 import { Utils } from "electrobun/bun";
 
-const lockDir = join(Utils.paths.userData, "single-instance.lock");
-const pidFile = join(lockDir, "pid");
+const lockFile = join(Utils.paths.userData, "single-instance.lock");
 
 const isProcessAlive = (pid: number) => {
   try {
@@ -17,47 +16,25 @@ const isProcessAlive = (pid: number) => {
 
 export const cleanupLock = () => {
   try {
-    const pid = Number(readFileSync(pidFile, "utf8"));
-
+    const pid = Number(readFileSync(lockFile, "utf8"));
     if (pid === process.pid) {
-      rmSync(lockDir, { recursive: true, force: true });
+      rmSync(lockFile, { force: true });
     }
   } catch {}
 };
 
 export const enforceSingleInstance = () => {
-  try {
-    // Atomic: only one process can create this directory.
-    mkdirSync(lockDir);
-    writeFileSync(pidFile, String(process.pid));
-  } catch {
-    // Someone already created the lock.
+  if (existsSync(lockFile)) {
     try {
-      const pid = Number(readFileSync(pidFile, "utf8"));
-
+      const pid = Number(readFileSync(lockFile, "utf8"));
       if (Number.isFinite(pid) && isProcessAlive(pid)) {
         process.exit(0);
       }
-    } catch {
-      // stale/invalid lock; remove and try once more
-      rmSync(lockDir, { recursive: true, force: true });
-      try {
-        mkdirSync(lockDir);
-        writeFileSync(pidFile, String(process.pid));
-      } catch {
-        process.exit(0);
-      }
-    }
+    } catch {}
+    rmSync(lockFile, { force: true });
   }
 
-  // Fallbacks for process termination.
+  writeFileSync(lockFile, String(process.pid));
+
   process.on("exit", cleanupLock);
-  process.on("SIGINT", () => {
-    cleanupLock();
-    process.exit(0);
-  });
-  process.on("SIGTERM", () => {
-    cleanupLock();
-    process.exit(0);
-  });
 };

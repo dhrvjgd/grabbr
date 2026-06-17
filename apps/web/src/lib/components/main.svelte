@@ -5,7 +5,7 @@
 </script>
 
 <section class="flex flex-col items-center gap-4">
-  <Image src="favicon.png" class="size-12" />
+  <Image src="/favicon.png" class="size-12" />
   <h2 class="heading mb-2 max-w-2xl text-center">
     One downloader. Every format. YouTube, Instagram, and more soon.
   </h2>
