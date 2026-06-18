@@ -1,8 +1,8 @@
 import Electrobun, { BrowserWindow, Updater } from "electrobun/bun";
 
-import { activeDownloadProcesses } from "./lib/procs";
+import { cleanupDownloadProcesses } from "./lib/procs";
 import { cleanupLock, enforceSingleInstance } from "./lib/single-instance";
-import { store } from "./lib/store";
+import { closeDb, store } from "./lib/store";
 import { rpc } from "./rpc";
 
 enforceSingleInstance();
@@ -42,12 +42,7 @@ if (channel !== "dev") {
 }
 
 Electrobun.events.on("before-quit", () => {
-  for (const [, proc] of activeDownloadProcesses) {
-    try {
-      proc.kill("SIGKILL");
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  cleanupDownloadProcesses();
+  closeDb();
   cleanupLock();
 });

@@ -35,6 +35,4 @@ export const enforceSingleInstance = () => {
   }
 
   writeFileSync(lockFile, String(process.pid));
-
-  process.on("exit", cleanupLock);
 };

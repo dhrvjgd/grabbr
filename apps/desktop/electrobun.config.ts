@@ -9,7 +9,7 @@ export default {
     name: "Grabbr",
     description: "Multimedia Downloader",
     identifier: "grabbr",
-    version: "0.2.2",
+    version: "0.2.3",
   },
   runtime: {
     exitOnLastWindowClosed: true,

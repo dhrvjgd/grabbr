@@ -104,23 +104,13 @@ function resetPrefs<K extends keyof PreferenceMap>(...keys: K[]) {
 
 // guard against double-close if multiple signals fire
 let dbClosed = false;
-function closeDb(): void {
+export function closeDb(): void {
   if (dbClosed) return;
   dbClosed = true;
   try {
     db.close();
   } catch {}
 }
-
-process.on("exit", closeDb);
-process.on("SIGINT", () => {
-  closeDb();
-  process.exit(0);
-});
-process.on("SIGTERM", () => {
-  closeDb();
-  process.exit(0);
-});
 
 export const store = {
   get all(): Readonly<Preferences> {
