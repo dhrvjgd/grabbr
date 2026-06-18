@@ -1,13 +1,10 @@
 import { isGithubActions, isWindows } from "../utils";
 import { patchIconWindows } from "./patch-icon-windows";
 
-const postPackageScript = async () => {
+try {
   if (isWindows && isGithubActions) {
     await patchIconWindows();
   }
-};
-
-postPackageScript().catch((error) => {
-  console.error("Error: ", error);
-  process.exit(1);
-});
+} catch (error) {
+  console.error("Post-package script error: ", error);
+}

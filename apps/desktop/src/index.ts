@@ -1,8 +1,7 @@
-import Electrobun, { BrowserWindow, Updater } from "electrobun/bun";
+import { BrowserWindow, Updater } from "electrobun/bun";
 
-import { cleanupDownloadProcesses } from "./lib/procs";
-import { cleanupLock, enforceSingleInstance } from "./lib/single-instance";
-import { closeDb, store } from "./lib/store";
+import { enforceSingleInstance } from "./lib/single-instance";
+import { store } from "./lib/store";
 import { rpc } from "./rpc";
 
 enforceSingleInstance();
@@ -41,8 +40,8 @@ if (channel !== "dev") {
   });
 }
 
-Electrobun.events.on("before-quit", () => {
-  cleanupDownloadProcesses();
-  closeDb();
-  cleanupLock();
-});
+// Electrobun.events.on("before-quit", () => {
+//   cleanupDownloadProcesses();
+//   closeDb();
+//   cleanupLock();
+// });

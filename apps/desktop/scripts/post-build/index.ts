@@ -9,5 +9,5 @@ try {
     await patchIconWindows();
   }
 } catch (error) {
-  console.error(error);
+  console.error("Post-build script error: ", error);
 }

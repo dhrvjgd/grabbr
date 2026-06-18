@@ -1,13 +1,10 @@
 import { isGithubActions } from "../utils";
 import { downloadBinaries } from "./download-binaries";
 
-const preBuildScript = async () => {
+try {
   if (isGithubActions) {
     await downloadBinaries();
   }
-};
-
-preBuildScript().catch((error) => {
-  console.error("Error: ", error);
-  process.exit(1);
-});
+} catch (error) {
+  console.error("Pre-build script error: ", error);
+}

@@ -29,7 +29,7 @@ const stmtSet = db.query<void, [string, string]>(
 const stmtDelete = db.query<void, [string]>(`DELETE FROM preferences WHERE key = ?`);
 
 // safe dot-path setter — coerces non-object intermediates rather than throwing
-function setByPath(obj: any, path: string, value: unknown): void {
+const setByPath = (obj: any, path: string, value: unknown): void => {
   const segments = path.split(".");
   segments.reduce((o: any, k, i) => {
     if (i === segments.length - 1) {
@@ -39,7 +39,7 @@ function setByPath(obj: any, path: string, value: unknown): void {
     }
     return o[k];
   }, obj);
-}
+};
 
 // in-memory cache — reads never hit disk
 let cache: Preferences = (() => {
@@ -70,7 +70,9 @@ let cache: Preferences = (() => {
 
 function getPrefs<K extends keyof PreferenceMap>(key: K): PreferenceMap[K] {
   const val = (key as string).split(".").reduce<any>((obj, k) => obj?.[k], cache);
-  if (val !== undefined) return val;
+  if (val !== undefined) {
+    return val;
+  }
   // fallback to default if cache is somehow missing the key
   return (key as string).split(".").reduce<any>((obj, k) => obj?.[k], DefaultPreferences);
 }
@@ -105,7 +107,9 @@ function resetPrefs<K extends keyof PreferenceMap>(...keys: K[]) {
 // guard against double-close if multiple signals fire
 let dbClosed = false;
 export function closeDb(): void {
-  if (dbClosed) return;
+  if (dbClosed) {
+    return;
+  }
   dbClosed = true;
   try {
     db.close();

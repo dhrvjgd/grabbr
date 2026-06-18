@@ -1,6 +1,6 @@
 import { $ } from "bun";
 
-(async () => {
+try {
   // remove all node_modules directories
   await $`find . -type d -name node_modules -prune -print -exec rm -rf '{}' +`;
 
@@ -12,7 +12,6 @@ import { $ } from "bun";
 
   // remove the build dirs
   await $`rm -rvf apps/desktop/build apps/desktop/artifacts apps/ui/dist apps/web/.vercel`;
-})().catch((error) => {
+} catch (error) {
   console.error(error);
-  process.exit(1);
-});
+}
